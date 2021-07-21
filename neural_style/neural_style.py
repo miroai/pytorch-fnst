@@ -1,5 +1,5 @@
 import argparse
-import os
+import os, sys
 import sys
 import time
 import re
@@ -12,6 +12,9 @@ from torchvision import datasets
 from torchvision import transforms
 import torch.onnx
 
+#Paths
+cwdir = os.path.dirname(os.path.realpath(__file__))
+sys.path.insert(1, cwdir)
 import utils
 from transformer_net import TransformerNet
 from vgg import Vgg16
