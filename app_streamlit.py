@@ -102,7 +102,7 @@ def Main():
                 'content_scale': None,
                 'output_image': tmp_image_path,
                 'model': os.path.join(model_dir, model_name),
-                'cuda': 1 if torch.cuda.is_available else 0,
+                'cuda': 1 if torch.cuda.is_available() else 0,
                 'export_onnx': None
             }
             # Apply the model, convert to BGR first and after

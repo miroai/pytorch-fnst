@@ -10,7 +10,13 @@ The model uses the method described in [Perceptual Losses for Real-Time Style Tr
 </p>
 
 ## Requirements
-The program is written in Python, and uses [pytorch](http://pytorch.org/), [scipy](https://www.scipy.org). A GPU is not necessary, but can provide a significant speed up especially for training a new model. Regular sized images can be styled on a laptop or desktop using saved models.
+The program is written in Python, and uses [pytorch](http://pytorch.org/). Install `torch` and `torchvision` following [the lastest official instructions](https://pytorch.org/get-started/locally/)
+
+A GPU is not necessary, but can provide a significant speed up especially for training a new model. Regular sized images can be styled on a laptop or desktop using saved models. 
+
+[Streamlit](https://streamlit.io/) is used for the demo app and can be installed via:
+```
+pip install streamlit
 
 ## Usage
 Stylize image
