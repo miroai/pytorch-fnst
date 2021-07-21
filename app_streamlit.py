@@ -73,7 +73,7 @@ def Main():
             styled_im_base, styled_im_ext = os.path.splitext(styled_im_name)
             styled_pil_im = downsize_im(Image.open(os.path.join(styled_im_dir, styled_im_name)), max_h = 300)
             st.image(styled_pil_im, styled_im_base)
-            l_models = get_models(model_dir, image_name= styled_im_name, debug = True)
+            l_models = get_models(model_dir, image_name= styled_im_name, debug = False)
             l_intensity = [m.split('_')[-1].replace('.pth','') for m in l_models]
             assert len(l_models) == len(l_intensity), "number of models found must match number of intensity parsed"
 
