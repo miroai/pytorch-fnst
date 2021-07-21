@@ -7,6 +7,13 @@ from io import BytesIO
 from neural_style.neural_style import stylize
 
 #st.set_option("deprecation.showfileUploaderEncoding", False)
+class Dict2Class(object):
+	'''Turns a dictionary into a class'''
+    def __init__(self, my_dict):
+          
+        for key in my_dict:
+            setattr(self, key, my_dict[key])
+
 def get_image_download_link(pil_im, str_msg = 'Download result',
 		fname = None, str_format = 'JPEG'):
 	"""
@@ -99,7 +106,7 @@ def Main():
 				'export_onnx': None
 			}
 			# Apply the model, convert to BGR first and after
-			out_pil_im = stylize(style_args)
+			out_pil_im = stylize(Dict2Class(style_args))
 
 		# Show Result
 		l_col, r_col = st.beta_columns(2)
