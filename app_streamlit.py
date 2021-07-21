@@ -64,7 +64,7 @@ def Main():
 		)
 		if styled_im_name:
 			styled_im_base, styled_im_ext = os.path.splitext(styled_im_name)
-			styled_pil_im = downsize_im(Image.open(os.path.join(styled_im_dir, styled_im_name)))
+			styled_pil_im = downsize_im(Image.open(os.path.join(styled_im_dir, styled_im_name)), max_h = 300)
 			st.image(styled_pil_im, styled_im_base)
 			l_models = get_models(model_dir, image_name= styled_im_name, debug = True)
 			l_intensity = [m.split('_')[-1].replace('.pth','') for m in l_models]
@@ -72,7 +72,7 @@ def Main():
 
 			if len(l_intensity)>0:
 				intensity = st.selectbox('style intensity', options = l_intensity)
-				model_index = np.where(np.array(l_intensity) == intensity)[0]
+				model_index = np.where(np.array(l_intensity) == intensity)[0][0]
 				model_name = l_models[model_index]
 			else:
 				st.error(f'no models available for {styled_im_base}')
