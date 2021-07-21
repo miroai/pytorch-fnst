@@ -32,6 +32,13 @@ def get_styled_images(image_dir):
 	im_list = [f for f in os.listdir(image_dir) if f.endswith(('.jpg','.png'))]
 	return im_list
 
+def downsize_im(pil_im, max_h = 500):
+	o_w, o_h = pil_im.size
+	h = min(o_h, max_h)
+	w = int(o_w * h/ o_h)
+	im_small = pil_im.resize((w,h), Image.ANTIALIAS) #best downsize filter
+	return im_small
+
 def Main():
 	st.set_page_config(
 		layout="wide",
@@ -53,7 +60,8 @@ def Main():
 		)
 		if styled_im_name:
 			styled_im_base, styled_im_ext = os.path.splitext(styled_im_name)
-			st.image(Image.open(os.path.join(styled_im_dir, styled_im_name)), styled_im_base)
+			styled_pil_im = downsize_im(Image.open(os.path.join(styled_im_dir, styled_im_name)))
+			st.image(, styled_im_base)
 			l_models = get_models(model_dir, image_name= styled_im_name)
 			l_intensity = [m.split('_')[-1].replace('.pth','') for m in l_models]
 			assert len(l_models) == len(l_intensity), "number of models found must match number of intensity parsed"
