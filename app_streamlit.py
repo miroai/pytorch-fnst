@@ -4,7 +4,7 @@ import numpy as np
 from PIL import Image
 from io import BytesIO
 
-from neural_style.neural_styple import stylize
+from neural_style.neural_style import stylize
 
 #st.set_option("deprecation.showfileUploaderEncoding", False)
 def get_image_download_link(pil_im, str_msg = 'Download result',
