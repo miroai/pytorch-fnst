@@ -70,12 +70,13 @@ def Main():
 			l_intensity = [m.split('_')[-1].replace('.pth','') for m in l_models]
 			assert len(l_models) == len(l_intensity), "number of models found must match number of intensity parsed"
 
-			if len(l_intensity)> 0:
-				st.error('no models available for {styled_im_base}')
-			else:
+			if len(l_intensity)>0:
 				intensity = st.selectbox('style intensity', options = l_intensity)
 				model_index = np.where(np.array(l_intensity) == intensity)[0]
 				model_name = l_models[model_index]
+			else:
+				st.error(f'no models available for {styled_im_base}')
+				return None
 		else:
 			return None
 	with r_col:
