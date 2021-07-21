@@ -16,7 +16,7 @@ def save_image(filename, data):
     img = img.transpose(1, 2, 0).astype("uint8")
     img = Image.fromarray(img)
     img.save(filename)
-
+    return img
 
 def gram_matrix(y):
     (b, ch, h, w) = y.size()

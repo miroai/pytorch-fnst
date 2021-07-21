@@ -126,7 +126,8 @@ def train(args):
 def stylize(args):
     device = torch.device("cuda" if args.cuda else "cpu")
 
-    content_image = utils.load_image(args.content_image, scale=args.content_scale)
+    content_image = args.pil_image if args.pil_image else \
+        utils.load_image(args.content_image, scale=args.content_scale)
     content_transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Lambda(lambda x: x.mul(255))
@@ -151,7 +152,7 @@ def stylize(args):
                 output = torch.onnx._export(style_model, content_image, args.export_onnx).cpu()
             else:
                 output = style_model(content_image).cpu()
-    utils.save_image(args.output_image, output[0])
+    return utils.save_image(args.output_image, output[0])
 
 
 def stylize_onnx_caffe2(content_image, args):
