@@ -40,7 +40,7 @@ def train(args):
     save_model_filename = os.path.basename(args.style_image) + "_" +  "{:.0e}".format(args.content_weight) + \
                         "_" + "{:.0e}".format(args.style_weight) + ".pth"
     if os.path.isfile(os.path.join(args.save_model_dir, save_model_filename)):
-        print(f'trained model already exist. Exiting...')
+        print(f'trained model {save_model_filename} already exist. Exiting...')
         return None
 
     transform = transforms.Compose([
