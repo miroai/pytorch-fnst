@@ -61,11 +61,12 @@ def Main():
 		if styled_im_name:
 			styled_im_base, styled_im_ext = os.path.splitext(styled_im_name)
 			styled_pil_im = downsize_im(Image.open(os.path.join(styled_im_dir, styled_im_name)))
-			st.image(, styled_im_base)
+			st.image(styled_pil_im, styled_im_base)
 			l_models = get_models(model_dir, image_name= styled_im_name)
 			l_intensity = [m.split('_')[-1].replace('.pth','') for m in l_models]
 			assert len(l_models) == len(l_intensity), "number of models found must match number of intensity parsed"
-			intensity = st.selectbox('style intensity', option = l_intensity)
+
+			intensity = st.selectbox('style intensity', options = l_intensity)
 			model_index = np.where(np.array(l_intensity) == intensity)[0]
 			model_name = l_models[model_index]
 		else:
