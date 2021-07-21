@@ -21,10 +21,14 @@ def get_image_download_link(pil_im, str_msg = 'Download result',
 	href = f'<a href="data:file/jpg;base64,{img_str}" {fname_str}>{str_msg}</a>'
 	return href
 
-def get_models(model_dir, image_name = None):
+def get_models(model_dir, image_name = None, debug = False):
 	assert os.path.isdir(model_dir), f"{model_dir} is not a valid path"
 	m_list = [f for f in os.listdir(model_dir) if f.endswith('.pth')]
+	if debug:
+		print(f'models found: \n {m_list}')
 	m_list = [m for m in m_list if image_name in m] if image_name else m_list
+	if debug:
+		print(f'models matching {image_name}:\n{m_list}')
 	return m_list
 
 def get_styled_images(image_dir):
@@ -62,7 +66,7 @@ def Main():
 			styled_im_base, styled_im_ext = os.path.splitext(styled_im_name)
 			styled_pil_im = downsize_im(Image.open(os.path.join(styled_im_dir, styled_im_name)))
 			st.image(styled_pil_im, styled_im_base)
-			l_models = get_models(model_dir, image_name= styled_im_name)
+			l_models = get_models(model_dir, image_name= styled_im_name, debug = True)
 			l_intensity = [m.split('_')[-1].replace('.pth','') for m in l_models]
 			assert len(l_models) == len(l_intensity), "number of models found must match number of intensity parsed"
 
