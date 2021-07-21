@@ -97,10 +97,10 @@ def Main():
         with st.spinner(text="Applying Style..."):
             # Load Args Dictionary
             style_args = {
-                'content-image': None,
+                'content_image': None,
                 'pil_image': Image.fromarray(img0),
-                'content-scale': None,
-                'output-image': tmp_image_path,
+                'content_scale': None,
+                'output_image': tmp_image_path,
                 'model': os.path.join(model_dir, model_name),
                 'cuda': 1 if torch.cuda.is_available else 0,
                 'export_onnx': None
