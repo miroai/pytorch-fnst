@@ -37,6 +37,12 @@ def train(args):
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
 
+    save_model_filename = os.path.basename(args.style_image) + "_" +  "{:.0e}".format(args.content_weight) + \
+                        "_" + "{:.0e}".format(args.style_weight) + ".pth"
+    if os.path.isfile(os.path.join(args.save_model_dir, save_model_filename)):
+        print(f'trained model already exist. Exiting...')
+        return None
+
     transform = transforms.Compose([
         transforms.Resize(args.image_size),
         transforms.CenterCrop(args.image_size),
@@ -116,10 +122,8 @@ def train(args):
 
     # save model
     transformer.eval().cpu()
-    save_model_filename = "epoch_" + str(args.epochs) + "_" + str(time.ctime()).replace(' ', '_') + "_" + str(
-        args.content_weight) + "_" + str(args.style_weight) + ".model"
-    save_model_filename = os.path.basename(args.style_image) + "_" +  "{:.0e}".format(args.content_weight) + \
-                          "_" + "{:.0e}".format(args.style_weight) + ".pth"
+    # save_model_filename = "epoch_" + str(args.epochs) + "_" + str(time.ctime()).replace(' ', '_') + "_" + str(
+    #     args.content_weight) + "_" + str(args.style_weight) + ".model"
     save_model_path = os.path.join(args.save_model_dir, save_model_filename)
     torch.save(transformer.state_dict(), save_model_path)
 
