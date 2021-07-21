@@ -50,6 +50,24 @@ def downsize_im(pil_im, max_h = 500):
     im_small = pil_im.resize((w,h), Image.ANTIALIAS) #best downsize filter
     return im_small
 
+@st.cache
+def style_image(pil_im, model_path, 
+        use_cuda = torch.cuda.is_available(),
+        tmp_img_path = '/tmp/pytorch_fnst.jpg'
+        ):
+    # Load Args Dictionary
+    style_args = {
+        'content_image': None,
+        'pil_image': pil_im,
+        'content_scale': None,
+        'output_image': tmp_img_path,
+        'model': model_path,
+        'cuda': 1 if use_cuda else 0,
+        'export_onnx': None
+    }
+    out_pil_im = stylize(Dict2Class(style_args))
+    return out_pil_im
+
 def Main():
     st.set_page_config(
         layout="wide",
@@ -62,7 +80,6 @@ def Main():
     l_col , r_col = st.beta_columns(2)
     styled_im_dir = "styled_images"
     model_dir = "saved_models"
-    tmp_image_path = '/tmp/pytorch_fnst.jpg'
 
     with l_col:
         styled_im_name = st.selectbox(
@@ -88,6 +105,7 @@ def Main():
             return None
     with r_col:
         raw_image_bytes = st.file_uploader("Choose an image...", type = ['jpg', 'jpeg'], accept_multiple_files = False)
+        use_cuda = st.checkbox('use CUDA') if torch.cuda.is_available() else False
 
     if raw_image_bytes is not None:
         im_name, im_ext = os.path.splitext(raw_image_bytes.name)
@@ -95,18 +113,12 @@ def Main():
         img0 = np.array(Image.open(raw_image_bytes))
 
         with st.spinner(text="Applying Style..."):
-            # Load Args Dictionary
-            style_args = {
-                'content_image': None,
-                'pil_image': Image.fromarray(img0),
-                'content_scale': None,
-                'output_image': tmp_image_path,
-                'model': os.path.join(model_dir, model_name),
-                'cuda': 1 if torch.cuda.is_available() else 0,
-                'export_onnx': None
-            }
-            # Apply the model, convert to BGR first and after
-            out_pil_im = stylize(Dict2Class(style_args))
+            in_pil_im = Image.fromarray(img0)
+            max_in_im_h = r_col.number_input('max input image height (0 = no resize)', value = 500)
+            in_pil_im = downsize_im(in_pil_im, max_h = max_in_im_h) if max_in_im_h else in_pil_im
+                        
+            out_pil_im = style_image(pil_im = in_pil_im, model_path = os.path.join(model_dir, model_name),
+                            use_cuda= use_cuda)
 
         # Show Result
         l_col, r_col = st.beta_columns(2)
