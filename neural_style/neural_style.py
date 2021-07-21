@@ -42,6 +42,8 @@ def train(args):
     if os.path.isfile(os.path.join(args.save_model_dir, save_model_filename)):
         print(f'trained model {save_model_filename} already exist. Exiting...')
         return None
+    else:
+        print(f'training {save_model_filename}...')
 
     transform = transforms.Compose([
         transforms.Resize(args.image_size),
