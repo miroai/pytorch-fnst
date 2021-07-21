@@ -1,3 +1,8 @@
+# Project Specific
+saved_models/*.pth
+styled_images/*.jpg
+styled_images/*.png
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
