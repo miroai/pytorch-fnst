@@ -123,7 +123,7 @@ def Main():
         # Show Result
         l_col, r_col = st.beta_columns(2)
         with l_col:
-            st.image(out_pil_im, caption = f"{styled_im_name} effects at {intensity} intensity")
+            st.image(out_pil_im, caption = f"{styled_im_base} effects at {intensity} intensity")
 
             if st.checkbox('Download Image'):
                 st.markdown(
