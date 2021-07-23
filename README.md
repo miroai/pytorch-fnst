@@ -1,26 +1,20 @@
 # fast-neural-style :city_sunrise: :rocket:
-This repository contains a pytorch implementation of an algorithm for artistic style transfer. The algorithm can be used to mix the content of an image with the style of another image. For example, here is a photograph of a door arch rendered in the style of a stained glass painting.
+This repository contains a pytorch implementation of an algorithm for artistic style transfer. The algorithm and all the code cames from [PyTorch/examples](https://github.com/pytorch/examples/tree/master/fast_neural_style). Slight modification was made in the training script to output more meaningful model names and a streamlit app was added for stylizing images.
 
-The model uses the method described in [Perceptual Losses for Real-Time Style Transfer and Super-Resolution](https://arxiv.org/abs/1603.08155) along with [Instance Normalization](https://arxiv.org/pdf/1607.08022.pdf). The saved-models for examples shown in the README can be downloaded from [here](https://www.dropbox.com/s/lrvwfehqdcxoza8/saved_models.zip?dl=0).
-
-<p align="center">
-    <img src="images/style-images/mosaic.jpg" height="200px">
-    <img src="images/content-images/amber.jpg" height="200px">
-    <img src="images/output-images/amber-mosaic.jpg" height="440px">
-</p>
+For an detailed explanation of how the model works, [this repo](https://github.com/gordicaleksa/pytorch-neural-style-transfer) is particularly helpful.
 
 ## Requirements
-The program is written in Python, and uses [pytorch](http://pytorch.org/). Install `torch` and `torchvision` following [the lastest official instructions](https://pytorch.org/get-started/locally/)
+The program is written in Python, and uses [pytorch](http://pytorch.org/). Install `torch` and `torchvision` following [the lastest official instructions](https://pytorch.org/get-started/locally/). [Streamlit](https://streamlit.io/) is used for the demo app. 
 
-A GPU is not necessary, but can provide a significant speed up especially for training a new model. Regular sized images can be styled on a laptop or desktop using saved models. 
+All the requirements and can be installed by `pip install -r requirements.txt`
 
-[Streamlit](https://streamlit.io/) is used for the demo app and can be installed via:
-```
-pip install streamlit
+A GPU is not necessary, but can provide a significant speed up especially for training a new model. Regular sized images can be styled on a laptop or desktop (CPU only) using saved models. 
 
 ## Usage
-Stylize image
-```
+### Stylize image
+
+use the streamlit app by running `streamlit run app_streamlit_evaluate.py` or 
+
 python neural_style/neural_style.py eval --content-image </path/to/content/image> --model </path/to/saved/model> --output-image </path/to/output/image> --cuda 0
 ```
 * `--content-image`: path to content image you want to stylize.
@@ -29,35 +23,19 @@ python neural_style/neural_style.py eval --content-image </path/to/content/image
 * `--content-scale`: factor for scaling down the content image if memory is an issue (eg: value of 2 will halve the height and width of content-image)
 * `--cuda`: set it to 1 for running on GPU, 0 for CPU.
 
-Train model
+### Train model
 ```bash
 python neural_style/neural_style.py train --dataset </path/to/train-dataset> --style-image </path/to/style/image> --save-model-dir </path/to/save-model/folder> --epochs 2 --cuda 1
 ```
 
 There are several command line arguments, the important ones are listed below
-* `--dataset`: path to training dataset, the path should point to a folder containing another folder with all the training images. I used COCO 2014 Training images dataset [80K/13GB] [(download)](https://cocodataset.org/#download).
+* `--dataset`: path to training dataset, the path should point to a folder containing another folder with all the training images. An example of this is the mini-imagenet dataset [4GB] which you can download [here](https://www.kaggle.com/ifigotin/imagenetmini-1000).
 * `--style-image`: path to style-image.
 * `--save-model-dir`: path to folder where trained model will be saved.
 * `--cuda`: set it to 1 for running on GPU, 0 for CPU.
-
-Refer to ``neural_style/neural_style.py`` for other command line arguments. For training new models you might have to tune the values of `--content-weight` and `--style-weight`. The mosaic style model shown above was trained with `--content-weight 1e5` and `--style-weight 1e10`. The remaining 3 models were also trained with similar order of weight parameters with slight variation in the `--style-weight` (`5e10` or `1e11`).
+* `--batch-size`: defaults to 4 but this depends on how much CUDA memory you have available and the size of the style image. Larger style image requires more CUDA memory. In general, if your style image is no longer than 1000 px on the long edge, you should be able to train comfortablly with batch size 4 on 16GB of CUDA memory
+* `--style-weight`: when keeping the `content-weight` constant (1e5), a higher style weight will minimize the style's feature map's gram loss more, therefore, making the input image more and more like the style image. It's best adjusted by power of 10 (I personally start with 1e10, 5e10, 1e11)
 
 ## Models
 
 Models for the examples shown below can be downloaded from [here](https://www.dropbox.com/s/lrvwfehqdcxoza8/saved_models.zip?dl=0) or by running the script ``download_saved_models.py``.
-
-<div align='center'>
-  <img src='images/content-images/amber.jpg' height="174px">		
-</div>
-
-<div align='center'>
-  <img src='images/style-images/mosaic.jpg' height="174px">
-  <img src='images/output-images/amber-mosaic.jpg' height="174px">
-  <img src='images/output-images/amber-candy.jpg' height="174px">
-  <img src='images/style-images/candy.jpg' height="174px">
-  <br>
-  <img src='images/style-images/rain-princess-cropped.jpg' height="174px">
-  <img src='images/output-images/amber-rain-princess.jpg' height="174px">
-  <img src='images/output-images/amber-udnie.jpg' height="174px">
-  <img src='images/style-images/udnie.jpg' height="174px">
-</div>
